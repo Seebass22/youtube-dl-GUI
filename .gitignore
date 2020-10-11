@@ -1,0 +1,21 @@
+### Audio ###
+*.m3u
+*.m4a
+*.mp3
+*.mpa
+*.wav
+*.wma
+*.ogg
+*.flac
+
+### Video ###
+*.3g2
+*.3gp
+*.mkv
+*.avi
+*.flv
+*.mov
+*.mp4
+*.mpg
+*.ogv
+*.webm

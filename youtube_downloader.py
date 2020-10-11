@@ -17,18 +17,20 @@ class GridWindow(Gtk.Window):
 
         # DL button
         button = Gtk.Button(label="DL")
-        button.connect("clicked", self.on_button_clicked)
+        button.connect("clicked", self.on_dl_button_clicked)
 
         # metadata button
         metabutton = Gtk.Button(label="meta")
         metabutton.connect("clicked", self.on_meta_button_clicked)
 
+        # audio only tickbox
         audio_only_box = Gtk.CheckButton(label="audio only")
         audio_only_box.connect("toggled", self.on_audio_box_toggled)
 
         # input field
         self.txt = Gtk.Entry()
 
+        # grid layout
         grid.add(button)
         grid.attach(metabutton, 1, 0, 1, 1)
         grid.attach(self.txt, 2, 0, 2, 1)
@@ -47,7 +49,7 @@ class GridWindow(Gtk.Window):
             print(meta['uploader'])
             print(meta['title'])
 
-    def on_button_clicked(self, button):
+    def on_dl_button_clicked(self, button):
         url = ['']
         url[0] = self.txt.get_text()
         with youtube_dl.YoutubeDL(ytdl_opts) as ydl:
