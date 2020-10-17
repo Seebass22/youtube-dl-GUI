@@ -1,10 +1,11 @@
+#!/usr/bin/python3
 import youtube_dl
-import gi
 
+import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 
-ytdl_opts = {}
+import threading
 
 
 class GridWindow(Gtk.Window):
@@ -30,11 +31,16 @@ class GridWindow(Gtk.Window):
         # input field
         self.txt = Gtk.Entry()
 
+        # spinner
+        self.spinner = Gtk.Spinner()
+        ytdl_opts['progress_hooks'] = [self.download_finished_hook] 
+
         # grid layout
         grid.add(button)
         grid.attach(metabutton, 1, 0, 1, 1)
         grid.attach(self.txt, 2, 0, 2, 1)
         grid.attach(audio_only_box, 0, 1, 1, 1)
+        grid.attach(self.spinner, 1, 1, 1, 1)
 
     def on_audio_box_toggled(self, checkbox):
         if checkbox.get_active():
@@ -52,10 +58,22 @@ class GridWindow(Gtk.Window):
     def on_dl_button_clicked(self, button):
         url = ['']
         url[0] = self.txt.get_text()
-        with youtube_dl.YoutubeDL(ytdl_opts) as ydl:
-            ydl.download(url)
 
+        self.ydl = youtube_dl.YoutubeDL(ytdl_opts)
 
+        self.thread = threading.Thread(
+                target=self.ydl.download,
+                args=(url,)
+                )
+        self.thread.start()
+
+    def download_finished_hook(self, d):
+        if d['status'] == 'downloading':
+            self.spinner.start()
+        if d['status'] == 'finished':
+            self.spinner.stop()
+
+ytdl_opts = {}
 win = GridWindow()
 win.connect("destroy", Gtk.main_quit)
 win.show_all()
