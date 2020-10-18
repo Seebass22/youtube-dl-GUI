@@ -33,7 +33,7 @@ class GridWindow(Gtk.Window):
 
         # spinner
         self.spinner = Gtk.Spinner()
-        ytdl_opts['progress_hooks'] = [self.download_finished_hook] 
+        ytdl_opts['progress_hooks'] = [self.ytdl_progress_hook]
 
         # grid layout
         grid.add(button)
@@ -67,7 +67,7 @@ class GridWindow(Gtk.Window):
                 )
         self.thread.start()
 
-    def download_finished_hook(self, d):
+    def ytdl_progress_hook(self, d):
         if d['status'] == 'downloading':
             self.spinner.start()
         if d['status'] == 'finished':
