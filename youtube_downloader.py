@@ -35,12 +35,22 @@ class GridWindow(Gtk.Window):
         self.spinner = Gtk.Spinner()
         ytdl_opts['progress_hooks'] = [self.ytdl_progress_hook]
 
+        # metadata output
+        self.metadata = Gtk.Label()
+
+        # download status
+        self.download_status = Gtk.Label()
+
         # grid layout
         grid.add(button)
         grid.attach(metabutton, 1, 0, 1, 1)
         grid.attach(self.txt, 2, 0, 2, 1)
+
         grid.attach(audio_only_box, 0, 1, 1, 1)
-        grid.attach(self.spinner, 1, 1, 1, 1)
+        grid.attach(self.metadata, 1, 1, 2, 1)
+        grid.attach(self.spinner, 3, 1, 1, 1)
+
+        grid.attach(self.download_status, 0, 2, 3, 1)
 
     def on_audio_box_toggled(self, checkbox):
         if checkbox.get_active():
@@ -52,8 +62,7 @@ class GridWindow(Gtk.Window):
         url = self.txt.get_text()
         with youtube_dl.YoutubeDL(ytdl_opts) as ydl:
             meta = ydl.extract_info(url, download=False)
-            print(meta['uploader'])
-            print(meta['title'])
+            self.metadata.set_text('uploader: {}\ntitle: {}'.format(meta['uploader'], meta['title']))
 
     def on_dl_button_clicked(self, button):
         url = ['']
@@ -70,6 +79,7 @@ class GridWindow(Gtk.Window):
     def ytdl_progress_hook(self, d):
         if d['status'] == 'downloading':
             self.spinner.start()
+            self.download_status.set_text('Downloading: {}\nprogress: {}\ntime remaining: {}'.format(d['filename'], d['_percent_str'], d['_eta_str']))
         if d['status'] == 'finished':
             self.spinner.stop()
 
