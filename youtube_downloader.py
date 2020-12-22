@@ -10,7 +10,7 @@ import threading
 
 class GridWindow(Gtk.Window):
     def __init__(self):
-        Gtk.Window.__init__(self, title="Grid Example")
+        Gtk.Window.__init__(self, title="youtube-dl GUI")
 
         # widget grid
         grid = Gtk.Grid()
