@@ -3,7 +3,7 @@ import youtube_dl
 
 import gi
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk
+from gi.repository import GLib, Gtk, GObject
 
 import threading
 
@@ -76,12 +76,15 @@ class GridWindow(Gtk.Window):
                 )
         self.thread.start()
 
-    def ytdl_progress_hook(self, d):
+    def update_dl_status_ui(self, d):
         if d['status'] == 'downloading':
             self.spinner.start()
             self.download_status.set_text('Downloading: {}\nprogress: {}\ntime remaining: {}'.format(d['filename'], d['_percent_str'], d['_eta_str']))
         if d['status'] == 'finished':
             self.spinner.stop()
+
+    def ytdl_progress_hook(self, d):
+        GLib.idle_add(self.update_dl_status_ui, d)
 
 ytdl_opts = {}
 win = GridWindow()
