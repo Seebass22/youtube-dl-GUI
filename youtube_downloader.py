@@ -17,8 +17,8 @@ class GridWindow(Gtk.Window):
         self.add(grid)
 
         # DL button
-        button = Gtk.Button(label="DL")
-        button.connect("clicked", self.on_dl_button_clicked)
+        self.button = Gtk.Button(label="DL")
+        self.button.connect("clicked", self.on_dl_button_clicked)
 
         # metadata button
         metabutton = Gtk.Button(label="meta")
@@ -42,7 +42,7 @@ class GridWindow(Gtk.Window):
         self.download_status = Gtk.Label()
 
         # grid layout
-        grid.add(button)
+        grid.add(self.button)
         grid.attach(metabutton, 1, 0, 1, 1)
         grid.attach(self.txt, 2, 0, 2, 1)
 
@@ -58,7 +58,7 @@ class GridWindow(Gtk.Window):
         else:
             ytdl_opts['format'] = 'best'
 
-    def on_meta_button_clicked(self, button):
+    def on_meta_button_clicked(self, metabutton):
         url = self.txt.get_text()
         with youtube_dl.YoutubeDL(ytdl_opts) as ydl:
             meta = ydl.extract_info(url, download=False)
@@ -78,10 +78,13 @@ class GridWindow(Gtk.Window):
 
     def update_dl_status_ui(self, d):
         if d['status'] == 'downloading':
+            self.button.set_sensitive(False)
             self.spinner.start()
             self.download_status.set_text('Downloading: {}\nprogress: {}\ntime remaining: {}'.format(d['filename'], d['_percent_str'], d['_eta_str']))
         if d['status'] == 'finished':
+            self.button.set_sensitive(True)
             self.spinner.stop()
+            self.download_status.set_text('')
 
     def ytdl_progress_hook(self, d):
         GLib.idle_add(self.update_dl_status_ui, d)
