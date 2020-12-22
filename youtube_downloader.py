@@ -30,6 +30,7 @@ class GridWindow(Gtk.Window):
 
         # input field
         self.txt = Gtk.Entry()
+        self.txt.set_width_chars(50)
 
         # spinner
         self.spinner = Gtk.Spinner()
