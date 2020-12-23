@@ -18,7 +18,9 @@ class GridWindow(Gtk.Window):
         grid.set_row_spacing(5)
         grid.set_column_spacing(5)
         grid.set_margin_top(5)
+        grid.set_margin_bottom(5)
         grid.set_margin_start(5)
+        grid.set_margin_end(5)
 
         # DL button
         self.button = Gtk.Button(label="DL")
@@ -42,20 +44,32 @@ class GridWindow(Gtk.Window):
 
         # metadata output
         self.metadata = Gtk.Label()
+        self.metadata.set_justify(Gtk.Justification.LEFT)
 
         # download status
         self.download_status = Gtk.Label()
+        self.download_status.set_justify(Gtk.Justification.LEFT)
+
+        # separator bars
+        self.vseparator = Gtk.Separator(orientation=Gtk.Orientation.VERTICAL)
+        self.hseparator = Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL)
+        self.hseparator2 = Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL)
 
         # grid layout
         grid.add(self.button)
-        grid.attach(metabutton, 1, 0, 1, 1)
-        grid.attach(self.txt, 2, 0, 2, 1)
+        grid.attach(metabutton, 2, 0, 1, 1)
+        grid.attach(self.txt, 3, 0, 1, 1)
 
-        grid.attach(audio_only_box, 0, 1, 1, 1)
-        grid.attach(self.metadata, 1, 1, 2, 1)
-        grid.attach(self.spinner, 3, 1, 1, 1)
+        grid.attach(self.hseparator, 0, 1, 4, 1)
 
-        grid.attach(self.download_status, 0, 2, 3, 1)
+        grid.attach(audio_only_box, 0, 2, 1, 1)
+        grid.attach(self.vseparator, 1, 2, 1, 1)
+        grid.attach(self.metadata, 2, 2, 1, 1)
+        grid.attach(self.spinner, 3, 2, 1, 1)
+
+        grid.attach(self.hseparator2, 0, 3, 4, 1)
+
+        grid.attach(self.download_status, 0, 4, 4, 1)
 
     def on_audio_box_toggled(self, checkbox):
         if checkbox.get_active():
