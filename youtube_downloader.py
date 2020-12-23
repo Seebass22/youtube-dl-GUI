@@ -15,6 +15,10 @@ class GridWindow(Gtk.Window):
         # widget grid
         grid = Gtk.Grid()
         self.add(grid)
+        grid.set_row_spacing(5)
+        grid.set_column_spacing(5)
+        grid.set_margin_top(5)
+        grid.set_margin_start(5)
 
         # DL button
         self.button = Gtk.Button(label="DL")
